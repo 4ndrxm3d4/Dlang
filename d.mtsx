@@ -105,7 +105,7 @@
         }
 
         { // template/alias/typedef-ish declarations
-            match: /\b(?:template|alias|typedef)\s+/, 1: "keyword"
+            match: /\b(?:template|alias|typedef)\s+/, 0: "keyword"
         }
 
         { // pragma
@@ -117,11 +117,11 @@
         }
 
         { // storage classes / type constructors
-            match: /\b(?:const|immutable|shared|inout|__gshared|scope|auto|static|extern|ref|out|lazy|nothrow|pure|final|abstract|override|synchronized|deprecated|safe|trusted|system)\b/, 0: "keyword2"
+            match: /\b(?:const|immutable|shared|inout|__gshared|scope|auto|static|extern|ref|out|lazy|nothrow|pure|final|abstract|override|synchronized|deprecated|safe|trusted|system)\b/, 0: "keyword"
         }
 
         { // declarations
-            match: /\b(?:class|struct|union|interface|enum)\s+/, 1: "keyword2"
+            match: /\b(?:class|struct|union|interface|enum)\s+/, 0: "keyword"
         }
 
         { // function/method/ctor/dtor
@@ -169,7 +169,7 @@
         }
 
         {match: /%/, 0: "operator"}
-        {match: /[+\-*/^&|]=?/, 0: "operator"}
+        {match: /[+\-*\/^&|]=?/, 0: "operator"}
         {match: /[=~]=?/, 0: "operator"}
         {match: /!=/, 0: "operator"}
         {match: /<<<|>>>|<<|>>/, 0: "operator"}
