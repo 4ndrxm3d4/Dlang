@@ -1,0 +1,213 @@
+{
+    // D language syntax highlight for MT Manager
+    // Theme: Monokai-inspired custom palette
+    name: ["D", ".d", ".di", ".dd"]
+
+    styles: [
+        "monokai-keyword", #F92672, #F92672, @B
+        "monokai-keyword2", #F92672, #F92672, @B
+        "monokai-type", #66D9EF, #66D9EF, @B
+        "monokai-string", #E6DB74, #E6DB74
+        "monokai-strEscape", #E6DB74, #E6DB74, @B
+        "monokai-comment", #75715E, #75715E, @I
+        "monokai-number", #AE81FF, #AE81FF, @B
+        "monokai-constant", #AE81FF, #AE81FF, @B
+        "monokai-operator", #F92672, #F92672
+        "monokai-func", #A6E22E, #A6E22E, @B
+        "monokai-builtin", #66D9EF, #66D9EF, @B
+        "monokai-variable", #F8F8F2, #F8F8F2
+        "monokai-meta", #F8F8F2, #F8F8F2, @B
+        "monokai-preproc", #F92672, #F92672, @B
+        "monokai-label", #A6E22E, #A6E22E, @B
+        "monokai-namespace", #66D9EF, #66D9EF
+    ]
+
+    comment: {startsWith: "//"}
+    comment: {startsWith: "/*", endsWith: "*/"}
+    comment: {startsWith: "/+", endsWith: "+/"}
+    comment: {startsWith: "+++", endsWith: "+++"}
+    comment: {startsWith: "---", endsWith: "---"}
+
+    bracketPairs: ["{}", "[]", "()", "<>"]
+
+    defines: [
+        "identifier": /[a-zA-Z_]\w*/
+
+        "strings": [
+            // normal double-quoted strings
+            {
+                start: {match: /"/}
+                end: {match: /(?m)"|$/}
+                style: "monokai-string"
+                contains: [
+                    {match: /\\(?:[nrt\\"']|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8}|0[0-7]{0,3})/, 0: "monokai-strEscape"}
+                    {match: /\\./, 0: "error"}
+                ]
+            }
+            // wysiwyg/raw strings
+            {
+                match: /[rR]\"(?:[^\"]|\\.)*\"/, 0: "monokai-string"
+            }
+            // delimited string: q{ ... }
+            {
+                start: {match: /q\{/}
+                end: {match: /\}/}
+                style: "monokai-string"
+            }
+            // heredoc-style strings
+            {
+                start: {match: /[cC]?`/}
+                end: {match: /(?m)`|$/}
+                style: "monokai-string"
+                contains: [
+                    {match: /\\./, 0: "error"}
+                ]
+            }
+            // characters
+            {
+                match: /'[^'\\]*(?:\\.[^'\\]*)*'/, 0: "monokai-string"
+            }
+        ]
+
+        "numbers": [
+            // integer/float literals with suffixes
+            {
+                match: /\b0(?:x[0-9a-fA-F_]+|b[01_]+|o[0-7_]+)(?:[iu](?:8|16|32|64|128|size)?)?\b/, 0: "monokai-number"
+            }
+            {
+                match: /\b\d[\d_]*\b/, 0: "monokai-number"
+            }
+            {
+                match: /\b\d[\d_]*(?:\.\d[\d_]*)?(?:[eE][+-]?\d[\d_]*)?(?:[fF]|[fF]i)?\b/, 0: "monokai-number"
+            }
+            {
+                match: /\b\d[\d_]*(?:\.\d[\d_]*)?[fF]i?\b/, 0: "monokai-number"
+            }
+            {
+                match: /\.\d[\d_]*(?:[eE][+-]?\d[\d_]*)?[fF]?i?\b/, 0: "monokai-number"
+            }
+        ]
+    ]
+
+    contains: [
+        { // shebang
+            match: /^#![^\r\n]*/, 0: "monokai-comment"
+        }
+
+        {include: "strings"}
+
+        {include: "numbers"}
+
+        { // version/spec identifiers
+            match: /\b(?:debug|version|static\s+assert|final\s+switch)\b/, 0: "monokai-keyword2"
+        }
+
+        { // attributes
+            match: /@[a-zA-Z_]\w*/, 0: "monokai-preproc"
+        }
+
+        { // mixins
+            match: /\bmixin\s*\(/, 0: "monokai-keyword"
+        }
+
+        { // unittest block
+            match: /\bunittest\b(?=\s*[{(])/, 0: "monokai-keyword2"
+        }
+
+        { // template/alias/typedef-ish declarations
+            match: /\b(?:template|alias|typedef)\s+/, 0: "monokai-keyword"
+        }
+
+        { // pragma
+            match: /\bpragma\s*\(/, 0: "monokai-keyword"
+        }
+
+        { // invariant/body/in/out
+            match: /\b(?:invariant|body|in|out)\b/, 0: "monokai-keyword"
+        }
+
+        { // storage classes / type constructors
+            match: /\b(?:const|immutable|shared|inout|__gshared|scope|auto|static|extern|ref|out|lazy|nothrow|pure|final|abstract|override|synchronized|deprecated|safe|trusted|system)\b/, 0: "monokai-keyword"
+        }
+
+        { // declarations
+            match: /\b(?:class|struct|union|interface|enum)\s+/, 0: "monokai-keyword"
+        }
+
+        { // function/method/ctor/dtor
+            match: /\b(?:this|~this)\b/, 0: "monokai-variable"
+        }
+
+        { // builtin types
+            match: /\b(?:void|bool|byte|ubyte|short|ushort|int|uint|long|ulong|cent|ucent|float|double|real|ifloat|idouble|ireal|cfloat|cdouble|creal|char|wchar|dchar|size_t|ptrdiff_t|typeof|typeof\s*\(|auto)\b/, 0: "monokai-type"
+        }
+
+        { // keywords
+            match: keywordsToRegex(
+                "align as assert auto break case catch continue"
+                "default delete do else enum export finally"
+                "for foreach foreach_reverse goto if import"
+                "inout invariant is lazy module new"
+                "override pragma return scope struct super"
+                "switch synchronized this throw try union"
+                "unittest version volatile while with"
+                "immutable shared static const __gshared"
+                "ref out"
+            ), 0: "monokai-keyword"
+        }
+
+        { // literals / constants
+            match: keywordsToRegex(
+                "true false null"
+            ), 0: "monokai-constant"
+        }
+
+        { // type declarations: Type name
+            match: /\b([A-Z]\w*)\s+([a-zA-Z_]\w*)\b/, 1: "monokai-type", 2: "monokai-variable"
+        }
+
+        { // function declaration: Type name(...)
+            match: /\b([a-zA-Z_]\w*)\s*\(/, 1: "monokai-func"
+        }
+
+        { // function call or UFCS chain
+            match: /\.[a-zA-Z_]\w*\s*\(/, 0: "monokai-func"
+        }
+
+        { // UFCS/function call without parens as property chain
+            match: /\.[a-zA-Z_]\w*\b/, 0: "monokai-variable"
+        }
+
+        {match: /%/, 0: "monokai-operator"}
+        {match: /[+\-*/^&|]=?/, 0: "monokai-operator"}
+        {match: /[=~]=?/, 0: "monokai-operator"}
+        {match: /!=/, 0: "monokai-operator"}
+        {match: /<<<|>>>|<<|>>/, 0: "monokai-operator"}
+        {match: /<>|<|>/, 0: "monokai-operator"}
+        {match: /\.\.\./, 0: "monokai-operator"}
+        {match: /&&|\|\|/, 0: "monokai-operator"}
+        {match: /[?:]/, 0: "monokai-operator"}
+
+        { // module / import / package path
+            match: /\b(?:import|public|private|protected|package|export)\b/, 0: "monokai-keyword"
+        }
+
+        { // assert
+            match: /\bassert\s*\(/, 0: "monokai-keyword"
+        }
+
+        { // builtin functions
+            match: keywordsToRegex(
+                "assert assertCount cast toStringid"
+                "abort abs acos all any asin atan atan2 bits popcnt"
+                "bsr bsf btoggle bset bclr btstd avg cbrt ceil copysign"
+                "cos cosh cvariant cvariadic exp fabs fequle fgreater fgreatereq"
+                "floor fmax fmin fmod frexp hypot iceil idivmod ifloor"
+                "ilog2 irint iround isfinite isinf isnan isnormal issubnormal"
+                "iszero ldexp llnan ln10 ln2 log log10 max min modf pow"
+                "rint round rndtol rndtonl scalb sinc sqrt tan tanh"
+                "trunc"
+            ), 0: "monokai-builtin"
+        }
+    ]
+}
