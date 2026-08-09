@@ -168,17 +168,15 @@
             match: /\.[a-zA-Z_]\w*\b/, 0: "property"
         }
 
-        { // operators
-            {match: /%/, 0: "operator"}
-            {match: /[+\-*/^&|]=?/, 0: "operator"}
-            {match: /[=~]=?/, 0: "operator"}
-            {match: /!=/, 0: "operator"}
-            {match: /<<<|>>>|<<|>>/, 0: "operator"}
-            {match: /<>|<|>/, 0: "operator"}
-            {match: /\.\.\./, 0: "operator"}
-            {match: /&&|\|\|/, 0: "operator"}
-            {match: /[?:]/, 0: "operator"}
-        }
+        {match: /%/, 0: "operator"}
+        {match: /[+\-*/^&|]=?/, 0: "operator"}
+        {match: /[=~]=?/, 0: "operator"}
+        {match: /!=/, 0: "operator"}
+        {match: /<<<|>>>|<<|>>/, 0: "operator"}
+        {match: /<>|<|>/, 0: "operator"}
+        {match: /\.\.\./, 0: "operator"}
+        {match: /&&|\|\|/, 0: "operator"}
+        {match: /[?:]/, 0: "operator"}
 
         { // module / import / package path
             match: /\b(?:import|public|private|protected|package|export)\b/, 0: "keyword"
