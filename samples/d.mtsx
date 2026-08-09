@@ -170,6 +170,7 @@
 
         { // operators
             match: /([?:]|&&|\|\||[+\-*/%^&|]=?|=[=~]?|!=|<<|>>|>>>|<<<|<>|<|>|\.\.\.|\|\|)/, 0: "operator"
+            {match: /\//, 0: "operator"}
         }
 
         { // module / import / package path
